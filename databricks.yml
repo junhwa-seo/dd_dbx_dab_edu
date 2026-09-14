@@ -29,7 +29,7 @@ targets:
       catalog: training
       schema: dev
     permissions:
-     - group_name: user
+     - group_name: users
        level: CAN_VIEW
   prod:
     mode: production

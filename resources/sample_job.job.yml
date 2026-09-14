@@ -2,53 +2,27 @@
 
 resources:
   jobs:
-    sample_job:
-      name: sample_job
-
-      trigger:
-        # Run this job every day, exactly one day from the last run; see https://docs.databricks.com/api/workspace/jobs/create#trigger
-        periodic:
-          interval: 1
-          unit: DAYS
-
-      #email_notifications:
-      #  on_failure:
-      #    - your_email@example.com
-
-      parameters:
-        - name: catalog
-          default: ${var.catalog}
-        - name: schema
-          default: ${var.schema}
-
+    sjh_job_training:
+      name: sjh_job_training
       tasks:
-        - task_key: notebook_task
+        - task_key: create_bronze
           notebook_task:
-            notebook_path: ../src/sample_notebook.ipynb
-        - task_key: python_wheel_task
+            notebook_path: ../src/(Clone) create_online_retail_bronze_autoloader.py
+            source: WORKSPACE
+        - task_key: create_silver
           depends_on:
-            - task_key: notebook_task
-          python_wheel_task:
-            package_name: dd_dbx_dab_edu
-            entry_point: main
-            parameters:
-              - "--catalog"
-              - "${var.catalog}"
-              - "--schema"
-              - "${var.schema}"
-          environment_key: default
-        - task_key: refresh_pipeline
+            - task_key: create_bronze
+          notebook_task:
+            notebook_path: ../src/(Clone) create_online_retail_silver_autoloader.py\
+            source: WORKSPACE
+        - task_key: create_gold
           depends_on:
-            - task_key: notebook_task
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.dd_dbx_dab_edu_etl.id}
-
-      environments:
-        - environment_key: default
-          spec:
-            environment_version: "5"
-            dependencies:
-              # By default we just include the .whl file generated for the dd_dbx_dab_edu package.
-              # See https://docs.databricks.com/dev-tools/bundles/library-dependencies.html
-              # for more information on how to add other libraries.
-              - ../dist/*.whl
+            - task_key: create_silver
+          notebook_task:
+            notebook_path: ../src/(Clone) create_online_retail_gold_autoloader.py\
+            source: WORKSPACE
+      queue:
+        enabled: true
+      run_as:
+        service_principal_name: e997f61b-4e21-4b6e-b254-ad0843fb0c97
+      performance_target: PERFORMANCE_OPTIMIZED

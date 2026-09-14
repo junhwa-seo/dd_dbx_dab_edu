@@ -28,6 +28,9 @@ targets:
     variables:
       catalog: training
       schema: dev
+    permissions:
+     - group_name: user
+       level: CAN_VIEW
   prod:
     mode: production
     workspace:

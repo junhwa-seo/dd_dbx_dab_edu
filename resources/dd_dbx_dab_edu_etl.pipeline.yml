@@ -1,0 +1,20 @@
+# The main pipeline for dd_dbx_dab_edu
+
+resources:
+  pipelines:
+    dd_dbx_dab_edu_etl:
+      name: dd_dbx_dab_edu_etl
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      root_path: "../src/dd_dbx_dab_edu_etl"
+
+      libraries:
+        - glob:
+            include: ../src/dd_dbx_dab_edu_etl/transformations/**
+
+      environment:
+        dependencies:
+          # We include every dependency defined by pyproject.toml by defining an editable environment
+          # that points to the folder where pyproject.toml is deployed.
+          - --editable ${workspace.file_path}

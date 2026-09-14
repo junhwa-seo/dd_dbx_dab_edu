@@ -16,7 +16,7 @@ variables:
     description: The schema to use
 
 targets:
-  dev:
+  dev_sjh:
     # The default target uses 'mode: development' to create a development copy.
     # - Deployed resources get prefixed with '[dev my_user_name]'
     # - Any job schedules and triggers are paused by default.

@@ -7,19 +7,19 @@ resources:
       tasks:
         - task_key: create_bronze
           notebook_task:
-            notebook_path: src/(Clone) create_online_retail_bronze_autoloader.ipynb
+            notebook_path: ../src/(Clone) create_online_retail_bronze_autoloader.ipynb
             source: WORKSPACE
         - task_key: create_silver
           depends_on:
             - task_key: create_bronze
           notebook_task:
-            notebook_path: src/(Clone) create_online_retail_silver_autoloader.ipynb
+            notebook_path: ../src/(Clone) create_online_retail_silver_autoloader.ipynb
             source: WORKSPACE
         - task_key: create_gold
           depends_on:
             - task_key: create_silver
           notebook_task:
-            notebook_path: src/(Clone) create_online_retail_gold_autoloader.ipynb
+            notebook_path: ../src/(Clone) create_online_retail_gold_autoloader.ipynb
             source: WORKSPACE
       queue:
         enabled: true
